@@ -1,0 +1,68 @@
+version "4.11"
+
+Class LE_EventHandler : EventHandler
+{
+	int curlevel;
+	int levelcount;
+	LevelInfo loclevel;
+
+	override void onRegister()
+	{
+		console.printf('Registered');
+		
+		levelcount = LevelInfo.GetLevelInfoCount();
+	}
+	
+	override void WorldTick()
+	{
+		if (curlevel < 0) curlevel = levelcount - 1;
+		if (curlevel >= levelcount) curlevel = 0;
+	
+		loclevel = LevelInfo.getLevelInfo(curlevel);
+	}
+	
+	override void RenderOverlay(RenderEvent _event)
+	{
+		if (!loclevel) return;
+		
+		string content = "";
+		content = content .. "Level num: " .. loclevel.levelnum .. "\n";
+		content = content .. "Level name: " .. loclevel.LookupLevelName() .. "\n"; 
+		
+		Screen.DrawText(SmallFont, Font.CR_Red, 5, 40, content);
+	}
+	
+	override bool InputProcess(InputEvent _event)
+	{
+		if (_event.type != InputEvent.Type_KeyUp) return false;
+	
+		switch (_event.KeyScan)
+		{
+			default:
+				break;
+			case 28:
+				Level.changeLevel(loclevel.mapname);
+				break;
+			case 200:
+				EventHandler.SendNetworkEvent("polllevel", 1);
+				break;
+			case 208:
+				EventHandler.SendNetworkEvent("polllevel", -1);
+				break;
+		}
+		
+		return false;
+	}
+	
+	override void NetworkProcess(ConsoleEvent _event)
+	{
+		switch(int(name(_event.name)))
+		{
+			case int(name("polllevel")):
+				curlevel += _event.args[0];
+				break;
+			default:
+				break;
+		}
+	}
+}
