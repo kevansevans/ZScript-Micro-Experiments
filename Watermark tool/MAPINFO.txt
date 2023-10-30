@@ -1,0 +1,4 @@
+GameInfo
+{
+	AddEventHandlers = "ZS_InDevelopment"
+}

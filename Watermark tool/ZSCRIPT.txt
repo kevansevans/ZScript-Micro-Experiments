@@ -1,0 +1,13 @@
+version "2.4"
+
+Class ZS_InDevelopment : StaticEventHandler
+{
+	override void RenderOverlay(RenderEvent _event)
+	{
+		double scale = Cvar.getCvar('ZS_DevScale', players[consoleplayer]).getFloat();
+		double alpha = Cvar.getCvar('ZS_DevAlpha', players[consoleplayer]).getFloat();
+		Screen.DrawText(BigFont, Font.CR_White, 10, 10, "In Development", DTA_ScaleX, scale, DTA_ScaleY, scale, DTA_Alpha, alpha);
+	}	
+}
+
+//Made by kevansevans. No credit needed.
