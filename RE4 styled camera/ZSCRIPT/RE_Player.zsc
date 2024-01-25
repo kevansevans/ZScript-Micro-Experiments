@@ -1,0 +1,78 @@
+Class RE_Player : DoomPlayer
+{
+	Default
+	{
+		Player.DisplayName "RE_Player";
+		Species "PlayerEntity";
+	}
+
+	RE_Camera Camera;
+	RE_PlayerAim PlayerAim;
+	
+	override void PostBeginPlay()
+	{
+		Super.postBeginPlay();
+		
+		if (!camera) camera = RE_Camera(Actor.spawn('RE_Camera', self.pos));
+		if (!playeraim) playeraim = RE_PlayerAim(Actor.spawn('RE_PlayerAim', self.pos));
+		self.setcamera(camera);
+	}
+	
+	override void tick()
+	{
+		updatecamera();
+		
+		Super.tick();
+	}
+	
+	bool aiming;
+	
+	void updatecamera()
+	{
+		let pinfo = self.player;
+		if (pinfo.cmd.buttons & BT_AltAttack) aiming = true;
+		else aiming = false;
+	
+		FLineTraceData trace;
+		if (!aiming) Self.LineTrace(self.angle + 15, -48, self.pitch, 0, 40, 0, 0, trace);
+		else		 Self.LineTrace(self.angle + 45, -15, self.pitch, 0, 40, 0, 0, trace);
+		
+		camera.setOrigin(trace.hitlocation, true);
+		camera.angle = self.angle;
+		camera.pitch = self.pitch;
+		
+		if (!aiming) return;
+		
+		camera.lineTrace(camera.angle, 2048, camera.pitch, TRF_ThruSpecies, 0, 0, 0, trace);
+		playeraim.setOrigin(trace.hitLocation, true);
+		if (trace.HitActor.bIsMonster) playeraim.bInvisible = false;
+		else playeraim.bInvisible = true;
+	}
+}
+
+class RE_Camera : Actor
+{
+	Default
+	{
+		+NoGravity;
+		Species "PlayerEntity";
+	}
+}
+
+class RE_PlayerAim : Actor
+{
+	Default
+	{
+		+Invisible;
+		+NoInteraction;
+		+NoGravity;
+		Species "PlayerEntity";
+	}
+	
+	States
+	{
+		Spawn:
+			CAND A -1 Bright;
+			Stop;
+	}
+}
