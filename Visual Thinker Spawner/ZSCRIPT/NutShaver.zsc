@@ -1,0 +1,14 @@
+class NutShaver : EventHandler
+{
+	override void WorldThingSpawned(WorldEvent _event)
+	{
+		console.printf('yar har');
+		if (!_event.thing.bIsMonster) return;
+		
+		let thing = _event.thing;
+		let spr = thing.curstate.GetSpriteTexture(random(0, 7));
+		
+		VisualThinker.spawn("VisThinkObj", spr, thing.pos, (0, 0, 0), frandom(0.0, 1.0), SPF_Roll, random(0, 360), (frandom(0.1, 2.0), frandom(0.1, 2.0)));
+		thing.destroy();
+	}
+}

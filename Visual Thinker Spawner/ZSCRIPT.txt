@@ -1,0 +1,7 @@
+version "4.12"
+
+class VisThinkObj : VisualThinker
+{}
+
+#include "ZSCRIPT/VisThinkSpawner.zsc"
+#include "ZSCRIPT/NutShaver.zsc"

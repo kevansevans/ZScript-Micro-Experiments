@@ -1,0 +1,7 @@
+//hey ho
+//You are free to use the code provided for any project you see fit.
+//Credits to "kevansevans" would be appreciated, however.
+
+//NUTS.wad: https://doomwiki.org/wiki/Nuts
+//I didn't make this, obviously, it's just here for demonstration purposes.
+//NUTS.wad unironically serves as a good "worst case scenario" benchmark for actors

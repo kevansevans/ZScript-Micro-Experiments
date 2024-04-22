@@ -1,0 +1,56 @@
+class VisThinkSpawner : Actor
+{
+	String user_picture;
+	Double user_alpha;
+	Double user_roll;
+	Double user_scaleX;
+	Double user_scaleY;
+	Double user_offsetX;
+	Double user_offsetY;
+	
+	bool user_FullBright;
+	bool user_NoTimeFreeze;
+	bool user_RollSprite;
+	bool user_NoBillboard;
+	
+	Property user_alpha: user_alpha;
+	Property user_Roll: user_Roll;
+	Property user_scaleX: user_scaleX;
+	Property user_scaleY: user_scaleY;
+	Property user_offsetX: user_offsetX;
+	Property user_offsetY: user_offsetY;
+	
+	Default
+	{
+		VisThinkSpawner.user_alpha 1.0;
+		VisThinkSpawner.user_roll 0.0;
+		VisThinkSpawner.user_scaleX 1.0;
+		VisThinkSpawner.user_scaleY 1.0;
+		VisThinkSpawner.user_offsetX 0.0;
+		VisThinkSpawner.user_offsetY 0.0;
+	}
+	
+	override void PostBeginPlay()
+	{
+		int flags = 0;
+		
+		if (user_FullBright) flags |= SPF_FullBright;
+		if (user_NoTimeFreeze) flags |= SPF_NoTimeFreeze;
+		if (user_RollSprite) flags |= SPF_Roll;
+		if (user_NoBillboard) flags |= SPF_NO_XY_BILLBOARD;
+	
+		TextureID pic = TexMan.checkForTexture(user_picture);
+		if (!pic.exists()) pic = TexMan.checkForTexture("VSTKA0");
+	
+		VisualThinker.Spawn("VisThinkObj", pic, self.pos, (0, 0, 0), user_alpha, flags, user_roll, (user_scaleX, user_scaleY), (user_offsetX, user_offsetY));
+		
+		self.destroy();
+	}
+	
+	states
+	{
+		Spawn:
+			VSTK A -1 Bright;
+			stop;
+	}
+}

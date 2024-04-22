@@ -1,0 +1,9 @@
+DoomEdNums
+{
+	10000 = VisThinkSpawner
+}
+
+GameInfo
+{
+	AddEventHandlers = "NutShaver"
+}
